@@ -10,7 +10,7 @@ require AutoLoader;
 
 @ISA = qw(Exporter DynaLoader);
 @EXPORT = qw( );
-$VERSION = '1.001';
+$VERSION = '1.002';
 
 bootstrap SGI::syssgi;
 
@@ -23,18 +23,18 @@ syssgi - Perl inteface to the IRIX syssgi system call
 
 =head1 SYNOPSIS
 
-use syssgi;
+  use SGI::syssgi;
 
-  $sysid = syssgi::_SGI_SYSID();
-  $process_name = syssgi::_SGI_RDNAME($process_id, $bufferspace);
-  $variable_value = syssgi::_SGI_GETNVRAM($variable_name);
-  $success = syssgi::_SGI_SETNVRAM($variable_name, $new_value);
-  $success = syssgi::_SGI_SETLED(1);
-  $success = syssgi::_SGI_SSYNC();
-  $success = syssgi::_SGI_BDFLUSHCNT($kernel_write_delay);
-  $success = syssgi::_SGI_SET_AUTOPWRON($startup_time);
-  $timetrim = syssgi::_SGI_GETTIMETRIM();
-  $success = syssgi::_SGI_SETTIMETRIM($new_timetrim);
+  $sysid = SGI::syssgi::_SGI_SYSID();
+  $process_name = SGI::syssgi::_SGI_RDNAME($process_id, $bufferspace);
+  $variable_value = SGI::syssgi::_SGI_GETNVRAM($variable_name);
+  $success = SGI::syssgi::_SGI_SETNVRAM($variable_name, $new_value);
+  $success = SGI::syssgi::_SGI_SETLED(1);
+  $success = SGI::syssgi::_SGI_SSYNC();
+  $success = SGI::syssgi::_SGI_BDFLUSHCNT($kernel_write_delay);
+  $success = SGI::syssgi::_SGI_SET_AUTOPWRON($startup_time);
+  $timetrim = SGI::syssgi::_SGI_GETTIMETRIM();
+  $success = SGI::syssgi::_SGI_SETTIMETRIM($new_timetrim);
 
 =head1 REQUIRES
 
@@ -109,23 +109,23 @@ Change the timetrim value from the value originally configued in:
 
 =head1 VARIABLES
 
-=item syssgi::NVRAM_INITSTATE
+=item NVRAM_INITSTATE
 
 The initstate nvram environment variable. Stringvalue.
 
-=item syssgi::NVRAM_PATH
+=item NVRAM_PATH
 
 The path nvram environment variable. Stringvalue.
 
-=item syssgi::NVRAM_SHOWCONFIG
+=item NVRAM_SHOWCONFIG
 
 The path showconfig environment variable. Stringvalue.
 
-=item syssgi::NVRAM_SWAP
+=item NVRAM_SWAP
 
 The swap nvram environment variable. Stringvalue.
 
-=item syssgi::NVRAM_VERBOSE
+=item NVRAM_VERBOSE
 
 The verbose nvram environment variable. Stringvalue.
 
