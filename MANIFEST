@@ -1,0 +1,9 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+syssgi.c
+syssgi.i
+syssgi_wrap.c
+test.pl
+lib/SGI/syssgi.pm
