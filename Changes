@@ -10,6 +10,11 @@ File syntax:
 
 Revision History:
 -----------------
+1.005  Sat Jan 25 14:22:20 2003
+	* Renamed module to SGI::Syssgi
+	* Ported the module to use pure XS instead of Swig.
+	* Removed the buffer_space parameter to RDNAME.
+	* Minor POD modifications.
 
 1.002  Fri Sep 07 18:13:22 2002
 	* Corrected spellingerrors in the POD regarding the namespace.
@@ -23,4 +28,5 @@ Revision History:
 0.1.0  Wed Aug 14 03:22:13 2002
 	# original version with limited functionality. Only distributed to a few
 	  testers.
+
 

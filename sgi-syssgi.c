@@ -1,29 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/syssgi.h>
-#include <time.h>
-
-#define 	PROM_BUFFER_SIZE	256
-#define		NVRAM_INITSTATE		"initstate"
-#define		NVRAM_PATH		"path"
-#define		NVRAM_SHOWCONFIG	"showconfig"
-#define		NVRAM_SWAP		"swap"
-#define		NVRAM_VERBOSE		"verbose"
-
-
-/*  -------------------------------------------------------------------------- */
-/*  Function definitions                                                       */ 
-/*  -------------------------------------------------------------------------- */
-char *_SGI_SYSID (void);
-char *_SGI_RDNAME (int process_id, unsigned int buf_space);
-char *_SGI_GETNVRAM (char *prom_variable);
-int   _SGI_SETLED (int led_state);
-int   _SGI_SETNVRAM (char *prom_variable, char *prom_value);
-int   _SGI_SSYNC (void);
-int   _SGI_BDFLUSHCNT (unsigned int kern_write_delay);
-int   _SGI_SET_AUTOPWRON (double power_on);
-int   _SGI_GETTIMETRIM (void);
-int   _SGI_SETTIMETRIM (signed int timetrim_value);
+#include "sgi-syssgi.h"
 
 /*  -------------------------------------------------------------------------- */
 /*  _SGI_SYSID                                                                 */
@@ -64,19 +39,22 @@ signed int return_value = -1;
 /*  _SGI_RDNAME                                                                */
 /*  Returns the process name for the process id specified in <process_id>.     */
 /*  -------------------------------------------------------------------------- */
-char *_SGI_RDNAME (int process_id, unsigned int buffer_space) {
+char *_SGI_RDNAME (long process_id) {
 char *proc_buffer = "";
 	
-	if ((process_id > 0) && (buffer_space)) {
-		if ((proc_buffer = (char *)malloc(buffer_space)) != NULL) {
-			if ((syssgi(SGI_RDNAME, process_id, proc_buffer, buffer_space)) < 0) {
-				sprintf(proc_buffer, "");
-			}
+	if (process_id > 0) {
+
+        	if ((proc_buffer = (char *)malloc(RDNAME_BUFFER_SIZE)) != NULL) {
+                	if ((syssgi(SGI_RDNAME, process_id, proc_buffer, RDNAME_BUFFER_SIZE)) < 0) {
+                    		sprintf(proc_buffer, "");
+                	}
+
+			return(proc_buffer);
+			free(proc_buffer);
 		}
 	}
 
-	return(proc_buffer);
-	free(proc_buffer);
+	return("");
 }
 
 
@@ -190,7 +168,7 @@ int time_trim = 0, return_value = NULL;
 /* Change the timetrim value from the value originally configued in:          */
 /* /var/sysgen/mtune/kernel.                                                  */
 /* -------------------------------------------------------------------------- */
-int _SGI_SETTIMETRIM (signed int timetrim_value) {
+int _SGI_SETTIMETRIM (int timetrim_value) {
 int return_value = -1;
 
 	return_value = syssgi(SGI_SETTIMETRIM, timetrim_value);
@@ -198,7 +176,9 @@ int return_value = -1;
 }
 
 
+
 void main (void) {
 	
+    printf("Proc: %s\n", _SGI_RDNAME(491));
 	exit(0);
 }

@@ -8,7 +8,7 @@
 
 BEGIN { $| = 1; print "1..1\n"; }
 END {print "not ok 1\n" unless $loaded;}
-use SGI::syssgi;
+use SGI::Syssgi;
 $loaded = 1;
 print "ok 1\n";
 
@@ -18,3 +18,9 @@ print "ok 1\n";
 # (correspondingly "not ok 13") depending on the success of chunk 13
 # of the test code):
 
+if (SGI::Syssgi::_SGI_RDNAME($$) ne "") {
+	print("rdname ok 13\n");
+}
+else {
+	print("rdname not ok 13\n");
+}

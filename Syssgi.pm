@@ -1,32 +1,64 @@
-package SGI::syssgi;
+package SGI::Syssgi;
 
 use strict;
 use Carp;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK $AUTOLOAD);
 
 require Exporter;
 require DynaLoader;
 require AutoLoader;
 
 @ISA = qw(Exporter DynaLoader);
-@EXPORT = qw( );
-$VERSION = '1.002';
+# Items to export into callers namespace by default. Note: do not export
+# names by default without a very good reason. Use EXPORT_OK instead.
+# Do not simply export all your public functions/methods/constants.
+@EXPORT = qw(
+	NVRAM_INITSTATE
+	NVRAM_PATH
+	NVRAM_SHOWCONFIG
+	NVRAM_SWAP
+	NVRAM_VERBOSE
+	PROM_BUFFER_SIZE
+);
+$VERSION = '1.005';
 
-bootstrap SGI::syssgi;
+sub AUTOLOAD {
+    # This AUTOLOAD is used to 'autoload' constants from the constant()
+    # XS function.  If a constant is not found then control is passed
+    # to the AUTOLOAD in AutoLoader.
+
+    my $constname;
+    ($constname = $AUTOLOAD) =~ s/.*:://;
+    croak "& not defined" if $constname eq 'constant';
+    my $val = constant($constname, @_ ? $_[0] : 0);
+    if ($! != 0) {
+	if ($! =~ /Invalid/) {
+	    $AutoLoader::AUTOLOAD = $AUTOLOAD;
+	    goto &AutoLoader::AUTOLOAD;
+	}
+	else {
+		croak "Your vendor has not defined SGI::Syssgi macro $constname";
+	}
+    }
+    *$AUTOLOAD = sub () { $val };
+    goto &$AUTOLOAD;
+}
+
+bootstrap SGI::Syssgi $VERSION;
 
 1;
 __END__
 
 =head1 NAME
 
-syssgi - Perl inteface to the IRIX syssgi system call
+syssgi - Perl interface to the IRIX syssgi system call
 
 =head1 SYNOPSIS
 
   use SGI::syssgi;
 
   $sysid = SGI::syssgi::_SGI_SYSID();
-  $process_name = SGI::syssgi::_SGI_RDNAME($process_id, $bufferspace);
+  $process_name = SGI::syssgi::_SGI_RDNAME($process_id);
   $variable_value = SGI::syssgi::_SGI_GETNVRAM($variable_name);
   $success = SGI::syssgi::_SGI_SETNVRAM($variable_name, $new_value);
   $success = SGI::syssgi::_SGI_SETLED(1);
@@ -38,7 +70,8 @@ syssgi - Perl inteface to the IRIX syssgi system call
 
 =head1 REQUIRES
 
-Perl5.004, Silicon Graphics IRIX 6.5.x
+Perl 5
+Silicon Graphics IRIX 6.5.x
 
 =head1 DESCRIPTION
 
@@ -60,11 +93,9 @@ Turns on or off the led on the machine, this only works for some machines.
 Platforms reported to work so far is: Indigo2 and O2. A I<led_state> of 1 turns
 the led on, 0 turns the led off.
 
-=item B<_SGI_RDNAME (> I<process_id, bufferspace> B<)>
+=item B<_SGI_RDNAME (> I<process_id> B<)>
 
-Returns the process name for the pid specified by I<process_id>. I<bufferspace>
-characters is reserved and used in the name acquisition, if the process name is
-larger than his buffer, it will be truncated.
+Returns the process name for the pid specified by I<process_id>
 
 =item B<_SGI_GETNVRAM (> I<variable_name> B<)>
 
@@ -138,4 +169,3 @@ Daniel Gustafson B<daniel@hobbit.se>
 IRIX manpages for syssgi and nvram.
 
 =cut
-

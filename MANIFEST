@@ -1,9 +1,9 @@
 Changes
-MANIFEST
 Makefile.PL
+MANIFEST
 README
-syssgi.c
-syssgi.i
-syssgi_wrap.c
+Syssgi.pm
+Syssgi.xs
 test.pl
-lib/SGI/syssgi.pm
+sgi-syssgi.c
+sgi-syssgi.h
